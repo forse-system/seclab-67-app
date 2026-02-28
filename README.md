@@ -80,3 +80,78 @@ so the SQLite DB and seed user are prepared automatically.
 For training use, inquiry list output in `/inquiries.php` is intentionally not HTML-escaped.
 CSRF token checks are intentionally removed from form submissions.
 Do not use this configuration in production.
+
+## SQL Injection
+
+The login form (`POST /login.php`) is intentionally vulnerable to SQL injection in the username field.
+
+### Vulnerable code
+
+`src/auth.php` builds the query by string concatenation without sanitization:
+
+```php
+$sql = "SELECT id, username, display_name FROM users WHERE username = '$username' AND password_hash = '$password' LIMIT 1";
+$user = db()->query($sql)->fetch();
+```
+
+Passwords are stored as unsalted SHA-256 hashes so that the password condition can be evaluated directly in SQL.
+The input password is hashed with `hash('sha256', ...)` before being embedded in the query.
+
+### Attack payloads
+
+**Pattern 1 — comment-out (`admin' --`)**
+
+Enter the following in the username field and any string in the password field:
+
+```
+username: admin' --
+password: (anything)
+```
+
+The query becomes:
+
+```sql
+SELECT id, username, display_name FROM users
+WHERE username = 'admin' --' AND password_hash = 'anything' LIMIT 1
+```
+
+`--` starts a SQL comment, so the `AND password_hash = ...` condition is ignored.
+The row for `admin` is returned without password verification, and the attacker is logged in as admin.
+
+**Pattern 2 — always-true condition (`' OR 1=1 --`)**
+
+```
+username: ' OR 1=1 --
+password: (anything)
+```
+
+The query becomes:
+
+```sql
+SELECT id, username, display_name FROM users
+WHERE username = '' OR 1=1 --' AND password_hash = 'anything' LIMIT 1
+```
+
+`OR 1=1` makes the WHERE clause always true, so the first row in the table is returned.
+
+### Root cause and fix
+
+| | Vulnerable (current) | Secure |
+|---|---|---|
+| Query building | String concatenation | Prepared statement with `?` / `:name` placeholders |
+| Password storage | Plain text | `password_hash()` (bcrypt) |
+| Password verification | Compared in SQL | `password_verify()` in PHP |
+
+Secure implementation example:
+
+```php
+$stmt = db()->prepare(
+    'SELECT id, username, display_name, password_hash FROM users WHERE username = :username LIMIT 1'
+);
+$stmt->execute([':username' => $username]);
+$user = $stmt->fetch();
+
+if (!$user || !password_verify($password, (string) $user['password_hash'])) {
+    return false;
+}
+```

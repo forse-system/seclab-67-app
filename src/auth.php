@@ -9,17 +9,15 @@ function isLoggedIn(): bool
 
 function attemptLogin(string $username, string $password): bool
 {
-    $trimmedUsername = trim($username);
-
-    if ($trimmedUsername === '' || $password === '') {
+    if ($username === '' || $password === '') {
         return false;
     }
 
-    $stmt = db()->prepare('SELECT id, username, display_name, password_hash FROM users WHERE username = :username LIMIT 1');
-    $stmt->execute([':username' => $trimmedUsername]);
-    $user = $stmt->fetch();
+    $hashedPassword = hash('sha256', $password);
+    $sql = "SELECT id, username, display_name FROM users WHERE username = '$username' AND password_hash = '$hashedPassword' LIMIT 1";
+    $user = db()->query($sql)->fetch();
 
-    if (!$user || !password_verify($password, (string) $user['password_hash'])) {
+    if (!$user) {
         return false;
     }
 

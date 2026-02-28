@@ -58,7 +58,7 @@ if (!$existingUser) {
 
     $insert->execute([
         ':username' => $seedUsername,
-        ':password_hash' => password_hash($seedPassword, PASSWORD_DEFAULT),
+        ':password_hash' => hash('sha256', $seedPassword),
         ':display_name' => $seedDisplayName,
         ':created_at' => date('c'),
     ]);
