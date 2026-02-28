@@ -21,7 +21,6 @@ function attemptLogin(string $username, string $password): bool
         return false;
     }
 
-    session_regenerate_id(true);
     $_SESSION['user_id'] = (int) $user['id'];
 
     return true;
