@@ -8,20 +8,16 @@ requireLogin();
 $user = currentUser();
 
 if ($user === null) {
-    header('Location: /index.php');
-    exit;
+    redirectWithLocationHeader('/index.php');
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: /home.php');
-    exit;
+    redirectWithLocationHeader('/home.php');
 }
 
 if (!deleteCurrentUserAccount((int) $user['id'])) {
     $_SESSION['account_delete_error'] = 'アカウント削除に失敗しました。時間をおいて再度お試しください。';
-    header('Location: /home.php');
-    exit;
+    redirectWithLocationHeader('/home.php');
 }
 
-header('Location: /index.php');
-exit;
+redirectWithLocationHeader('/index.php');

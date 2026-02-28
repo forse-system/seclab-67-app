@@ -8,8 +8,7 @@ requireLogin();
 $user = currentUser();
 
 if ($user === null) {
-    header('Location: /index.php');
-    exit;
+    redirectWithLocationHeader('/index.php');
 }
 
 $accountDeleteError = '';

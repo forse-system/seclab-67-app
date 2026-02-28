@@ -8,22 +8,18 @@ requireLogin();
 $user = currentUser();
 
 if ($user === null) {
-    header('Location: /index.php');
-    exit;
+    redirectWithLocationHeader('/index.php');
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: /board.php');
-    exit;
+    redirectWithLocationHeader('/board.php');
 }
 
 $body = isset($_POST['body']) ? (string) $_POST['body'] : '';
 
 if (!createPost((int) $user['id'], $body)) {
     $_SESSION['post_error'] = '投稿に失敗しました。本文は1-2000文字で入力してください。';
-    header('Location: /board.php');
-    exit;
+    redirectWithLocationHeader('/board.php');
 }
 
-header('Location: /board.php');
-exit;
+redirectWithLocationHeader('/board.php');

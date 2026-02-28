@@ -79,6 +79,7 @@ so the SQLite DB and seed user are prepared automatically.
 
 For training use, inquiry list output in `/inquiries.php` is intentionally not HTML-escaped.
 CSRF token checks are intentionally removed from form submissions.
+All redirects are routed through `redirectWithLocationHeader()` and newline-separated values are split into multiple response headers.
 Do not use this configuration in production.
 
 ## SQL Injection

@@ -48,8 +48,7 @@ function currentUser(): ?array
 function requireLogin(): void
 {
     if (!isLoggedIn()) {
-        header('Location: /index.php');
-        exit;
+        redirectWithLocationHeader('/index.php');
     }
 }
 
