@@ -54,9 +54,13 @@ so the SQLite DB and seed user are prepared automatically.
 - `POST /login.php`: login action
 - `GET /home.php`: authenticated page
 - `POST /logout.php`: logout action
+- `GET /board.php`: bulletin board page (authenticated)
+- `POST /post_create.php`: create board post (authenticated)
 
 ## Quick verification
 
 1. Login with `admin / Admin#1234`.
 2. Confirm `http://localhost:8000/home.php` is accessible after login.
-3. Logout and confirm `/home.php` redirects to `/index.php`.
+3. Open `/board.php` and post text (e.g. `>>1` and `あいうえお`).
+4. Confirm post format like `3: Administrator (2026/02/28 10:00:00)` and body lines are shown.
+5. Logout and confirm `/home.php` redirects to `/index.php`.

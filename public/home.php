@@ -23,6 +23,7 @@ if ($user === null) {
     <h1>社内アプリ</h1>
     <p>ようこそ <?php echo htmlspecialchars((string) $user['display_name'], ENT_QUOTES, 'UTF-8'); ?> さん</p>
     <p>ユーザー名: <?php echo htmlspecialchars((string) $user['username'], ENT_QUOTES, 'UTF-8'); ?></p>
+    <p><a href="/board.php">掲示板へ</a></p>
 
     <form action="/logout.php" method="post">
         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrfToken(), ENT_QUOTES, 'UTF-8'); ?>">
