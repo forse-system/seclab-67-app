@@ -74,3 +74,38 @@ function logoutUser(): void
 
     session_destroy();
 }
+
+function deleteCurrentUserAccount(int $userId): bool
+{
+    if ($userId <= 0) {
+        return false;
+    }
+
+    $pdo = db();
+
+    try {
+        $pdo->beginTransaction();
+
+        $deletePosts = $pdo->prepare('DELETE FROM posts WHERE user_id = :user_id');
+        $deletePosts->execute([':user_id' => $userId]);
+
+        $deleteUser = $pdo->prepare('DELETE FROM users WHERE id = :id');
+        $deleteUser->execute([':id' => $userId]);
+
+        if ($deleteUser->rowCount() !== 1) {
+            $pdo->rollBack();
+            return false;
+        }
+
+        $pdo->commit();
+        logoutUser();
+
+        return true;
+    } catch (Throwable $e) {
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+
+        return false;
+    }
+}

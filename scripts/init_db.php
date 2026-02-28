@@ -33,6 +33,15 @@ $pdo->exec(
     )'
 );
 
+$pdo->exec(
+    'CREATE TABLE IF NOT EXISTS inquiries (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        message TEXT NOT NULL,
+        created_at TEXT NOT NULL
+    )'
+);
+
 $seedUsername = 'admin';
 $seedPassword = 'Admin#1234';
 $seedDisplayName = 'Administrator';

@@ -24,14 +24,13 @@ if (isset($_SESSION['login_error']) && is_string($_SESSION['login_error'])) {
 </head>
 <body>
     <h1>社内アプリ ログイン</h1>
+    <p><a href="/contact.php">お問い合わせはこちら</a></p>
 
     <?php if ($loginError !== ''): ?>
         <p><?php echo htmlspecialchars($loginError, ENT_QUOTES, 'UTF-8'); ?></p>
     <?php endif; ?>
 
     <form action="/login.php" method="post">
-        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrfToken(), ENT_QUOTES, 'UTF-8'); ?>">
-
         <p>
             <label for="username">ユーザー名</label>
             <input id="username" name="username" type="text" required>

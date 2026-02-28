@@ -37,7 +37,6 @@ $posts = listPosts(100);
     <?php endif; ?>
 
     <form action="/post_create.php" method="post">
-        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrfToken(), ENT_QUOTES, 'UTF-8'); ?>">
         <p>
             <label for="body">本文</label><br>
             <textarea id="body" name="body" rows="5" cols="60" required></textarea>

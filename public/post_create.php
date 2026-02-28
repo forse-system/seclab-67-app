@@ -17,13 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$csrfToken = isset($_POST['csrf_token']) ? (string) $_POST['csrf_token'] : null;
-if (!verifyCsrfToken($csrfToken)) {
-    http_response_code(400);
-    echo 'Bad Request';
-    exit;
-}
-
 $body = isset($_POST['body']) ? (string) $_POST['body'] : '';
 
 if (!createPost((int) $user['id'], $body)) {
