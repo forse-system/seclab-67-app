@@ -7,5 +7,6 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./:/app
+      - ./src:/app/src
+      - ./public:/app/public
     command: sh -c "php scripts/init_db.php && php -S 0.0.0.0:8000 -t public"
