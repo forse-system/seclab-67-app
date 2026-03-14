@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../src/bootstrap.php';
 
-$redirect = $_GET['redirect'] ?? null;
-if (is_string($redirect) && $redirect !== '') {
-    redirectWithLocationHeader($redirect);
-}
-
 if (isLoggedIn()) {
     redirectWithLocationHeader('/home.php');
 }

@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../src/bootstrap.php';
 
+$redirect = $_GET['redirect'] ?? null;
+if (is_string($redirect) && $redirect !== '') {
+    redirectWithLocationHeader($redirect);
+}
+
 requireLogin();
 $user = currentUser();
 
@@ -23,7 +28,7 @@ $inquiries = listInquiries(100);
 <body>
     <h1>お問い合わせ一覧（社内向け）</h1>
     <p>ログイン中: <?php echo htmlspecialchars((string) $user['display_name'], ENT_QUOTES, 'UTF-8'); ?></p>
-    <p><a href="/home.php">ホームに戻る</a></p>
+    <p><a href="?redirect=home.php">ホームに戻る</a></p>
 
     <hr>
 
