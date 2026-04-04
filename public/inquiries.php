@@ -1,24 +1,4 @@
-
-<?php
-declare(strict_types=1);
-
-require_once(__DIR__ . '/../src/bootstrap.php');
-
-$redirect = $_GET['redirect'] ?? null;
-if (is_string($redirect) && $redirect !== '') {
-    redirectWithLocationHeader($redirect);
-}
-
-requireLogin();
-$user = currentUser();
-
-if ($user === null) {
-    redirectWithLocationHeader('/index.php');
-}
-
-$inquiries = listInquiries(100);
-?>
-
+#このコメントを消してこの上部にphpコードを記入してください
 <!doctype html>
 <html lang="ja">
 <head>
