@@ -1,0 +1,43 @@
+diff --git a/docker-compose.yml b/docker-compose.yml
+index e636b78..7dacf39 100644
+--- a/docker-compose.yml
++++ b/docker-compose.yml
+@@ -4,8 +4,36 @@ services:
+       context: .
+       dockerfile: Dockerfile
+     container_name: seclab-67-app
+-    ports:
+-      - "8000:8000"
+     volumes:
+       - ./:/app
+     command: sh -c "php scripts/init_db.php && php -S 0.0.0.0:8000 -t public"
++
++  waf:
++    image: owasp/modsecurity-crs:nginx
++    container_name: waf
++    ports:
++      - "8000:8080"
++    environment:
++      BACKEND: http://app:8000
++      PORT: 8080
++      MODSEC_AUDIT_ENGINE: On
++      MODSEC_AUDIT_LOG_FORMAT: Native
++      MODSEC_AUDIT_LOG: /dev/stdout
++      MODSEC_AUDIT_LOG_PARTS: H
++      ACCESSLOG: /dev/null
++      ERRORLOG: /dev/null
++      MODSEC_DEBUG_LOG: /dev/null
++      MODSEC_DEBUG_LOGLEVEL: 0
++      MODSEC_RULE_ENGINE: DetectionOnly
++      BLOCKING_PARANOIA: 1
++      ANOMALY_INBOUND: 5
++      ANOMALY_OUTBOUND: 4
++      LOGLEVEL: warn
++    volumes:
++      - ./modsecurity/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf:/etc/modsecurity.d/owasp-crs/rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf:ro
++      - # ./modsecurity/REQUEST-910-XSS.conf:/etc/modsecurity.d/owasp-crs/rules/REQUEST-910-XSS.conf:ro
++      - # ./modsecurity/REQUEST-920-HEADER-INJECTION.conf:/etc/modsecurity.d/owasp-crs/rules/REQUEST-920-HEADER-INJECTION.conf:ro
++      - # ./modsecurity/REQUEST-930-SQL-INJECTION.conf:/etc/modsecurity.d/owsap-crs/rules/REQUEST-930-SQL-INJECTION.conf:ro
++    depends_on:
++      - app
++
