@@ -5,8 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: seclab-67-app
     volumes:
-      - ./src:/app/src
-      - ./public:/app/public
+      - ./:/app
     command: sh -c "php scripts/init_db.php && php -S 0.0.0.0:8000 -t public"
 
   waf:
