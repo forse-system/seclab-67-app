@@ -33,5 +33,6 @@ services:
       - ./modsecurity/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf:/etc/modsecurity.d/owasp-crs/rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf:ro
       - ./modsecurity/REQUEST-910-XSS.conf:/etc/modsecurity.d/owasp-crs/rules/REQUEST-910-XSS.conf:ro
       - ./modsecurity/REQUEST-920-HEADER-INJECTION.conf:/etc/modsecurity.d/owasp-crs/rules/REQUEST-920-HEADER-INJECTION.conf:ro
+      - ./modsecurity/REQUEST-930-SQL-INJECTION.conf:/etc/modsecurity.d/owasp-crs/rules/REQUEST-930-SQL-INJECTION.conf:ro
     depends_on:
       - app
